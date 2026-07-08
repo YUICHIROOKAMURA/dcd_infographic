@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCD（発達性協調運動症）を理解する ― 「不器用」の奥にある仕組み</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1b2a41;
+  --navy-deep:#0f1b2c;
+  --teal:#2f7a78;
+  --teal-light:#e3f1f0;
+  --amber:#d98e3f;
+  --amber-light:#faf0dd;
+  --cream:#faf6ee;
+  --cream-deep:#f2ead9;
+  --ink:#26313f;
+  --ink-soft:#5b6572;
+  --line:#dcd4c2;
+  --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Noto Sans JP",sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.85;
+  font-weight:400;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:"Noto Serif JP",serif;color:var(--navy);}
+img{max-width:100%;}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+/* ---------- nav ---------- */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  background:rgba(250,246,238,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  transform:translateY(-100%);
+  transition:transform .35s ease;
+}
+#nav.show{transform:translateY(0);}
+#nav .inner{
+  max-width:760px;margin:0 auto;padding:10px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12.5px;color:var(--navy);
+}
+#nav .brand{font-family:"Noto Serif JP",serif;font-weight:700;font-size:13.5px;}
+#nav .progress-track{position:absolute;bottom:-1px;left:0;height:2px;background:var(--line);width:100%;}
+#nav .progress-bar{height:100%;background:var(--teal);width:0%;transition:width .1s linear;}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(160deg,var(--navy-deep) 0%,var(--navy) 65%,#233a52 100%);
+  color:var(--cream);
+  position:relative;
+  padding:100px 24px 80px;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%, rgba(217,142,63,0.14), transparent 55%),
+             radial-gradient(circle at 10% 85%, rgba(47,122,120,0.25), transparent 50%);
+  pointer-events:none;
+}
+.hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:2;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;letter-spacing:.14em;color:var(--amber);
+  border:1px solid rgba(217,142,63,0.5);border-radius:20px;
+  padding:6px 14px;margin-bottom:28px;
+}
+.hero h1{
+  font-size:clamp(30px,6vw,44px);font-weight:900;line-height:1.5;color:#fff;
+  margin-bottom:20px;
+}
+.hero h1 span{color:var(--amber);}
+.hero p.lead{font-size:16px;color:#cdd7e2;max-width:520px;margin-bottom:44px;}
+.hero-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px;}
+.hstat{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);
+  border-radius:12px;padding:14px 18px;min-width:140px;flex:1;
+}
+.hstat b{display:block;font-family:"Noto Serif JP",serif;font-size:22px;color:var(--amber);}
+.hstat span{font-size:11.5px;color:#b8c3d0;}
+.scroll-cue{display:flex;align-items:center;gap:10px;font-size:12px;color:#9fb0c2;}
+.scroll-cue .arrow{animation:bob 1.6s infinite ease-in-out;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* ---------- section shells ---------- */
+section{padding:76px 0;position:relative;}
+section.alt{background:var(--white);}
+.section-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;letter-spacing:.12em;color:var(--teal);font-weight:700;
+  margin-bottom:14px;
+}
+.section-tag::before{content:"";width:20px;height:1px;background:var(--teal);}
+h2.section-title{font-size:clamp(22px,4vw,30px);font-weight:700;margin-bottom:18px;line-height:1.55;}
+p.section-desc{color:var(--ink-soft);font-size:15px;margin-bottom:36px;max-width:620px;}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ---------- icon circle ---------- */
+.icon-circle{
+  width:54px;height:54px;border-radius:50%;
+  background:var(--teal-light);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.icon-circle svg{width:26px;height:26px;stroke:var(--teal);fill:none;stroke-width:1.6;}
+.icon-circle.amber{background:var(--amber-light);}
+.icon-circle.amber svg{stroke:var(--amber);}
+.icon-circle.navy{background:#e7ebf1;}
+.icon-circle.navy svg{stroke:var(--navy);}
+
+/* ---------- definition compare cards ---------- */
+.compare-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+.compare-card{
+  background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:22px 22px;position:relative;
+}
+.compare-card.bad{border-color:#e3cfc2;background:#fdf7f2;}
+.compare-card.good{border-color:#c9dedc;background:var(--teal-light);}
+.compare-card h4{font-size:14.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.compare-card p{font-size:13.8px;color:var(--ink-soft);}
+.tag-x{color:#b5533a;font-family:"Noto Serif JP",serif;font-weight:700;}
+.tag-o{color:var(--teal);font-family:"Noto Serif JP",serif;font-weight:700;}
+
+/* ---------- stat bar ---------- */
+.stat-bar-wrap{margin:20px 0 8px;}
+.stat-bar-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:var(--ink-soft);}
+.stat-bar-bg{background:var(--cream-deep);border-radius:8px;height:14px;overflow:hidden;}
+.stat-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),#4a9d9a);width:0%;border-radius:8px;transition:width 1.4s cubic-bezier(.2,.8,.2,1);}
+.stat-bar-fill.amber{background:linear-gradient(90deg,var(--amber),#e8ab5f);}
+
+/* ---------- process flow ---------- */
+.flow{position:relative;padding-left:34px;margin-top:20px;}
+.flow::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:var(--line);}
+.flow-step{position:relative;padding-bottom:34px;}
+.flow-step:last-child{padding-bottom:0;}
+.flow-dot{
+  position:absolute;left:-34px;top:0;width:24px;height:24px;border-radius:50%;
+  background:var(--white);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif JP",serif;font-size:11px;color:var(--teal);font-weight:700;
+}
+.flow-step.break .flow-dot{border-color:#b5533a;color:#b5533a;background:#fdf7f2;}
+.flow-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+.flow-card h4{font-size:14.5px;margin-bottom:6px;}
+.flow-card p{font-size:13.5px;color:var(--ink-soft);}
+.flow-step.break .flow-card{border-color:#e3cfc2;background:#fdf7f2;}
+
+/* ---------- accordion (DSM-5) ---------- */
+.accordion-item{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--white);overflow:hidden;}
+.accordion-head{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.accordion-head .num{
+  font-family:"Noto Serif JP",serif;font-weight:900;color:var(--amber);font-size:19px;width:26px;flex-shrink:0;
+}
+.accordion-head h4{font-size:14.5px;flex:1;color:var(--navy);}
+.accordion-head .chev{width:16px;height:16px;flex-shrink:0;transition:transform .3s ease;stroke:var(--ink-soft);}
+.accordion-item.open .chev{transform:rotate(180deg);}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.accordion-item.open .accordion-body{max-height:400px;}
+.accordion-body-inner{padding:0 18px 18px 58px;font-size:13.8px;color:var(--ink-soft);}
+
+/* ---------- venn-ish overlap ---------- */
+.overlap-wrap{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
+.overlap-row{display:flex;align-items:center;gap:14px;}
+.overlap-label{width:74px;flex-shrink:0;font-size:12.5px;font-weight:700;color:var(--navy);text-align:right;}
+.overlap-track{flex:1;background:var(--cream-deep);border-radius:8px;height:26px;position:relative;overflow:hidden;}
+.overlap-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:10px;font-size:11.5px;color:#fff;font-weight:700;width:0%;transition:width 1.2s ease;}
+
+/* ---------- workplace grid ---------- */
+.work-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:24px;}
+.work-card{
+  background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px;
+  display:flex;gap:16px;
+}
+.work-card .txt h4{font-size:14.5px;margin-bottom:6px;}
+.work-card .txt p{font-size:13.5px;color:var(--ink-soft);}
+.work-card .txt .example{
+  display:block;margin-top:8px;font-size:12.5px;color:var(--teal);background:var(--teal-light);
+  padding:6px 10px;border-radius:8px;
+}
+
+/* ---------- tabs (CO-OP vs traditional) ---------- */
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.tab-btn{
+  border:1px solid var(--line);background:var(--white);border-radius:20px;padding:8px 16px;
+  font-size:12.5px;cursor:pointer;color:var(--ink-soft);transition:all .25s ease;font-family:"Noto Sans JP",sans-serif;
+}
+.tab-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:fadein .4s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.tab-panel .flow{margin-top:14px;}
+
+/* ---------- checklist ---------- */
+.checklist{list-style:none;margin-top:20px;}
+.checklist li{
+  display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:flex-start;
+}
+.checklist li:last-child{border-bottom:none;}
+.checklist .cnum{
+  font-family:"Noto Serif JP",serif;font-weight:900;color:var(--teal);font-size:15px;
+  width:26px;flex-shrink:0;
+}
+.checklist h4{font-size:14.5px;margin-bottom:4px;}
+.checklist p{font-size:13.5px;color:var(--ink-soft);}
+
+/* ---------- evidence badges ---------- */
+.evbadge{
+  display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:.03em;
+  margin-bottom:8px;
+}
+.ev-strong{background:#dcece9;color:#1f6b62;}
+.ev-mid{background:var(--amber-light);color:#a06423;}
+.ev-limited{background:#efe7f3;color:#7a5793;}
+
+/* ---------- critical box ---------- */
+.critical-box{
+  background:var(--navy-deep);color:#dbe3ec;border-radius:16px;padding:28px 24px;margin-top:10px;
+}
+.critical-box h3{color:var(--amber);font-size:16px;margin-bottom:14px;}
+.critical-box p{font-size:13.8px;color:#c3ccd8;margin-bottom:12px;}
+.critical-box p:last-child{margin-bottom:0;}
+
+/* ---------- footer / sources ---------- */
+footer{background:var(--navy-deep);color:#9fb0c2;padding:60px 0 40px;}
+footer h3{color:#fff;font-size:16px;margin-bottom:20px;}
+.source-list{list-style:none;font-size:13px;}
+.source-list li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.09);}
+.source-list a{color:#a9c6c4;text-decoration:none;}
+.source-list a:hover{text-decoration:underline;}
+.foot-name{margin-top:44px;font-size:12px;color:#6d7b8c;text-align:center;letter-spacing:.05em;}
+
+/* ---------- misc ---------- */
+.divider{width:40px;height:3px;background:var(--amber);border-radius:2px;margin-bottom:20px;}
+.quote-block{
+  border-left:3px solid var(--teal);padding:4px 0 4px 18px;margin:22px 0;font-size:14px;color:var(--ink-soft);font-style:normal;
+}
+strong.hl{color:var(--navy);font-weight:700;}
+.small-note{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+
+@media(min-width:640px){
+  .compare-grid{grid-template-columns:1fr 1fr;}
+  .work-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="inner">
+    <span class="brand">DCDを理解する</span>
+    <span id="nav-section">はじめに</span>
+  </div>
+  <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">就労移行支援スタッフ向け ｜ 5分で理解する</div>
+    <h1>「不器用」の奥にある<br>脳の<span>情報処理</span>の仕組み<br>― DCD（発達性協調運動症）を知る</h1>
+    <p class="lead">物によくぶつかる、字が乱れる、作業が遅い、手順を覚えても身体がついてこない ―― それは「やる気」や「練習不足」の問題ではないかもしれません。DCD（Developmental Coordination Disorder：発達性協調運動症）という、脳が身体の動きを組み立てる過程の特性です。</p>
+    <div class="hero-stats">
+      <div class="hstat"><b>5〜6%</b><span>学齢期の子どもにみられる割合</span></div>
+      <div class="hstat"><b>50〜70%</b><span>成人期まで特性が持続する割合</span></div>
+      <div class="hstat"><b>ADHD 50%</b><span>ADHDのある人がDCDを併せ持つ割合</span></div>
+    </div>
+    <div class="scroll-cue">
+      <span>スクロールして読み進める</span>
+      <span class="arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. なぜ重要か ============ -->
+<section id="sec1" data-title="なぜ知る必要があるか">
+  <div class="wrap reveal">
+    <div class="section-tag">01 ｜ なぜ知る必要があるか</div>
+    <h2 class="section-title">支援の現場で、いちばん見落とされやすい特性</h2>
+    <p class="section-desc">DCDはASDやADHDに比べて認知度が低く、本人も周囲も「不器用な性格」「練習不足」として片づけてしまいがちです。しかし有病率は<strong class="hl">ADHD（約7.2%）と同水準か、それ以上</strong>とされ、けっして珍しい特性ではありません。</p>
+
+    <div class="stat-bar-wrap">
+      <div class="stat-bar-label"><span>DCD（発達性協調運動症）</span><span>5〜8%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" data-w="70"></div></div>
+    </div>
+    <div class="stat-bar-wrap">
+      <div class="stat-bar-label"><span>ADHD（注意欠如多動症）</span><span>約7.2%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill amber" data-w="62"></div></div>
+    </div>
+    <div class="stat-bar-wrap">
+      <div class="stat-bar-label"><span>ASD（自閉スペクトラム症）</span><span>約1〜2%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" data-w="18"></div></div>
+    </div>
+    <p class="small-note">※ 割合は報告によって幅があります。DCDは5〜11歳で5〜6%前後という報告が中心です。また、男性は女性よりも有病率が高いとされ、その比率は<strong class="hl">男女比2:1〜7:1</strong>という報告があります。診断基準そのものに性差の規定はないため、この偏りが「女性は見過ごされやすいのでは」という指摘にもつながっています。</p>
+
+    <div class="quote-block">
+      医師を対象とした英語圏の調査では、小児科医の41%、総合診療医の23%しかDCDについての知識を持っていなかったという報告もあります。専門職の間でも認知度が十分でない特性だということです。
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">就労移行支援の利用者の中にも、ASDやADHDの診断の陰に隠れて気づかれていないDCDがある可能性があります。「作業が遅い」「指示通りにやっているのにミスが減らない」の背景に、協調運動の特性が関わっているケースを想定しておくことは、アセスメントの解像度を上げることにつながります。</p>
+  </div>
+</section>
+
+<!-- ============ 2. 定義：不器用と何が違うか ============ -->
+<section class="alt" id="sec2" data-title="DCDとは何か">
+  <div class="wrap reveal">
+    <div class="section-tag">02 ｜ DCDとは何か</div>
+    <h2 class="section-title">「本人の努力不足」ではなく「脳の設計上の特性」</h2>
+    <p class="section-desc">DCDは、知的な遅れや視覚の問題、脳性麻痺のような神経疾患がないにもかかわらず、体の動きを目的に合わせて滑らかに組み立てること＝「協調運動」が、年齢に見合ったレベルまで育ちにくい特性です。原因は解明され尽くしてはいませんが、<strong class="hl">練習量の不足ではなく中枢神経系の情報処理の違い</strong>によって起こると考えられています。</p>
+
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <h4><span class="tag-x">✕</span> よくある誤解</h4>
+        <p>「練習すればできるようになる」「本人のやる気の問題」「不注意で気が抜けている」という、性格や努力に原因を求める見方。</p>
+      </div>
+      <div class="compare-card good">
+        <h4><span class="tag-o">○</span> 実際の姿</h4>
+        <p>身体を動かすための「設計図の作成」と「実行しながらの微調整」というプロセス自体に時間がかかる、または一致しにくいという、情報処理上の特性。</p>
+      </div>
+    </div>
+
+    <div class="flow" style="margin-top:30px;">
+      <div class="flow-step">
+        <div class="flow-dot">1937</div>
+        <div class="flow-card">
+          <h4>最初期の医学報告（Orton）</h4>
+          <p>子どもの「不器用さ」を発達上の問題として報告した最初期の文献のひとつは、1937年のOrtonによるものとされています。以後、数十年にわたり「不器用な子ども症候群」など様々な名称で呼ばれ、用語が乱立する時期が続きました。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">1994</div>
+        <div class="flow-card">
+          <h4>国際的な概念の統一（国際コンセンサス会議）</h4>
+          <p>1994年、カナダ・オンタリオ州ロンドン市で開かれた国際コンセンサス会議で、それまで乱立していた名称や定義が整理され、「発達性協調運動症（DCD）」という呼称に統一されました。歴史的にはASDやADHDと比べて、概念としての整理が遅れて進んだ特性だといえます。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">次のセクションでは、この「設計図の作成」と「微調整」が具体的にどのような仕組みで行われていて、DCDのある人の脳内で何が起きているのかを、順を追って見ていきます。</p>
+  </div>
+</section>
+
+<!-- ============ 3. 仕組み：運動制御の3ステップ ============ -->
+<section id="sec3" data-title="身体を動かす仕組み">
+  <div class="wrap reveal">
+    <div class="section-tag">03 ｜ 身体を動かす仕組み</div>
+    <h2 class="section-title">私たちは、身体をどうやって動かしているのか</h2>
+    <p class="section-desc">たとえば「コップを持ち上げる」という単純な動作も、脳の中では次の3つの工程を高速で繰り返しています。多くの人はこの一連の流れを意識すらしませんが、DCDのある人はこのどこかで、処理に余計な労力や時間がかかっています。</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot">1</div>
+        <div class="flow-card">
+          <h4>① 設計図をつくる（運動計画）</h4>
+          <p>目で見た情報（コップまでの距離、大きさ、重さの予測）をもとに、脳が「どの筋肉を、どの順番で、どれくらいの力で動かすか」という設計図を事前に組み立てます。これを<strong class="hl">運動計画</strong>と呼びます。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">2</div>
+        <div class="flow-card">
+          <h4>② 「こうなるはず」を予測する（内部モデル）</h4>
+          <p>脳は設計図を実行する前から「この動きをすれば、身体はこう感じるはずだ」という予測（内部モデル）を作ります。この予測があるからこそ、私たちは動きながらいちいち目で確認しなくても、次の一手を先読みして滑らかに動けます。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">3</div>
+        <div class="flow-card">
+          <h4>③ ズレを一瞬で直す（フィードバック修正）</h4>
+          <p>実際に手を動かした結果が、②の予測とズレていれば、視覚や触覚からの情報をもとに軌道をその場で微調整します。健常な発達では、この予測と修正がほぼ同時に、無意識のうちに行われています。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:30px;">研究では、DCDのある人はこの②の「内部モデル（こうなるはずという予測）」を作ること自体に困難があるのではないか、という仮説（内部モデル仮説）が有力な説明のひとつとして議論されています。<span class="evbadge ev-mid">議論中の仮説</span></p>
+  </div>
+</section>
+
+<!-- ============ 4. 予測がズレるとどうなるか ============ -->
+<section class="alt" id="sec4" data-title="予測が立てにくいとどうなるか">
+  <div class="wrap reveal">
+    <div class="section-tag">04 ｜ 予測が立てにくいとどうなるか</div>
+    <h2 class="section-title">先読みができないと、常に「確認」が必要になる</h2>
+    <p class="section-desc">「こうなるはず」という予測（内部モデル）がうまく機能しないと、動きの結果を毎回、目や感覚で確認しながら進めるしかなくなります。これは、初めて訪れた土地で地図を持たずに一歩ごとに周囲を確認しながら歩くようなものです。</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot">A</div>
+        <div class="flow-card">
+          <h4>定型発達の場合</h4>
+          <p>予測が先に立っているため、動作の大部分を「自動運転」で処理できる。意識のリソースは会話や考え事など、別のことに回せる。</p>
+        </div>
+      </div>
+      <div class="flow-step break">
+        <div class="flow-dot">B</div>
+        <div class="flow-card">
+          <h4>DCDがある場合</h4>
+          <p>予測が立ちにくいため、動作の一つひとつを視覚的に確認しながら「手動運転」で進める必要がある。結果として、動作は<strong class="hl">遅く・不正確になりやすく</strong>、しかも常に注意力を使うため疲れやすい。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">これが、「何度練習しても身につかない」「一つの作業に集中していると他のことに気が回らない」といった現象の背景にある、情報処理上のメカニズムです。単なる練習不足ではなく、<strong class="hl">動作そのものの処理コストが定型発達より高い</strong>ということです。</p>
+  </div>
+</section>
+
+<!-- ============ 5. 診断基準 ============ -->
+<section id="sec5" data-title="診断基準">
+  <div class="wrap reveal">
+    <div class="section-tag">05 ｜ 診断基準</div>
+    <h2 class="section-title">DSM-5-TRにおける4つの基準</h2>
+    <p class="section-desc">DCDは米国精神医学会の診断基準DSM-5-TRでは「神経発達症群」に分類されます。知能指数との関係ではなく、年齢相応の協調運動ができているか、それが生活に支障をきたしているかによって診断されます。タップして詳細を確認できます。</p>
+
+    <div id="accordion">
+      <div class="accordion-item">
+        <div class="accordion-head">
+          <span class="num">A</span>
+          <h4>年齢に見合わない協調運動の困難</h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          協調運動技能の獲得や遂行が、生活年齢や学習の機会に応じて期待されるものより明らかに劣っている。物を落とす・物にぶつかる、はさみや刃物の使用、書字、自転車に乗る、スポーツへの参加などの遂行が、遅く・不正確になる。
+        </div></div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-head">
+          <span class="num">B</span>
+          <h4>日常生活・学業・仕事への明らかな支障</h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          Aの困難が、身の回りのこと（自己管理・自己保全）を著しく妨げ、学業成績や生産性、就労前後の活動、余暇、遊びに影響を与えている。「困っている」という主観だけでなく、実際に活動が妨げられていることが条件になる。
+        </div></div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-head">
+          <span class="num">C</span>
+          <h4>発症は発達段階の早期から</h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          症状の始まりは発達段階の早期（幼少期）にみられる。大人になってから急に生じたものではなく、子どもの頃から一貫して協調運動の困難が存在していたことを確認する。
+        </div></div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-head">
+          <span class="num">D</span>
+          <h4>他の疾患では説明できない</h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          運動技能の困難が、知的発達症（知的障害）や視覚障害によってうまく説明されず、運動に影響する神経疾患（脳性麻痺、筋ジストロフィー、変性疾患など）によるものでもない。
+        </div></div>
+      </div>
+    </div>
+    <p class="small-note">出典：DSM-5-TR（米国精神医学会）に基づく各種専門機関の解説記事より要約。名称は分類によって異なり、<strong class="hl">ICD-11</strong>では「発達性協調運動症」、<strong class="hl">ICD-10</strong>では「運動機能の特異的発達障害」という名称が用いられています。日本ではICD-11への移行が段階的に進んでいる途中のため、紹介状や診断書で名称が揺れて見えることがあります。</p>
+  </div>
+</section>
+
+<!-- ============ 6. 併存症 ============ -->
+<section class="alt" id="sec6" data-title="他の特性との重なり">
+  <div class="wrap reveal">
+    <div class="section-tag">06 ｜ 他の特性との重なり</div>
+    <h2 class="section-title">ADHD・ASD・LDと、驚くほど高く重なる</h2>
+    <p class="section-desc">DCDは単独で現れるより、他の神経発達症と併存することの方が多いという特徴があります。就労移行支援で出会う利用者の多くは、すでにADHDやASDの診断・特性を把握されているケースが多いため、その背後にDCDが隠れている可能性を意識しておく価値があります。</p>
+
+    <div class="overlap-wrap">
+      <div class="overlap-row">
+        <div class="overlap-label">ADHD</div>
+        <div class="overlap-track"><div class="overlap-fill" data-w="50" style="background:var(--teal);">約50%</div></div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-label">LD（学習障害）</div>
+        <div class="overlap-track"><div class="overlap-fill" data-w="27" style="background:var(--amber);">約18〜28%</div></div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-label">ASD</div>
+        <div class="overlap-track"><div class="overlap-fill" data-w="8" style="background:#8a6fa8;">約4〜8%</div></div>
+      </div>
+    </div>
+    <p class="small-note">※ ASDのある人に軽度の協調運動の問題まで含めると、より高い割合（約89%との報告も）になるという研究もあります。数値は調査によって幅があり、目安として捉えてください。<span class="evbadge ev-mid" style="margin-top:10px;">報告により幅のある数値</span></p>
+
+    <p class="section-desc" style="margin-top:28px;">この重なりが実務的に意味するのは、「ASDやADHDの特性で説明がついているつもりの困りごとの一部が、実はDCDに由来している可能性がある」ということです。ASDでは感覚特性の陰に、ADHDでは不注意・衝動性の陰に、DCDの困難が隠れて見過ごされやすいと指摘されています。</p>
+  </div>
+</section>
+
+<!-- ============ 7. 大人の診断が少ない理由 ============ -->
+<section id="sec7" data-title="大人の診断が少ない理由">
+  <div class="wrap reveal">
+    <div class="section-tag">07 ｜ 大人の診断が少ない理由</div>
+    <h2 class="section-title">なぜ「DCDの診断がある大人」にほとんど出会わないのか</h2>
+    <p class="section-desc">就労移行支援の現場でDCDという診断名を持つ利用者に出会うことが少ないのは、印象の問題ではなく、構造的な理由があります。「大人の診断が少ない＝大人にDCDが少ない」ではない、という点が重要です。</p>
+
+    <div class="flow">
+      <div class="flow-step break">
+        <div class="flow-dot">1</div>
+        <div class="flow-card">
+          <h4>評価ツールが子ども向けにしか整備されていない</h4>
+          <p>日本国内で使われているDCDのスクリーニング・評価ツール（CLASP、DCDQ、M-ABC2など）は<strong class="hl">未就学児から学齢期（おおむね3〜15歳）を対象にしたものが中心</strong>で、成人を測るための標準化されたツールがほぼ存在しません。診断基準そのものは年齢を問いませんが、「測る物差し」が大人用に整っていないという実務的な壁があります。</p>
+        </div>
+      </div>
+      <div class="flow-step break">
+        <div class="flow-dot">2</div>
+        <div class="flow-card">
+          <h4>幼少期の症状を遡って確認する必要がある</h4>
+          <p>DSM-5-TRの基準Cは「発達段階の早期からの発症」を要求します。大人が診断を受けるには、子どもの頃の運動発達の様子を本人の記憶や家族の証言から遡って確認する必要があり、これ自体がハードルになります。</p>
+        </div>
+      </div>
+      <div class="flow-step break">
+        <div class="flow-dot">3</div>
+        <div class="flow-card">
+          <h4>「不器用な性格」として自己完結し、医療につながらない</h4>
+          <p>DCDの特徴は外から見えづらく、怠慢や不注意と誤解されやすいため、本人も「自分はそういう性格なだけ」と捉え、医療機関を受診しないまま自己流の工夫だけで乗り切っているケースが多いと指摘されています。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">ASDやADHDでは成人向けの検査・診療体制が少しずつ整ってきている一方、DCDは大人向けの受け皿自体がまだ薄いのが実情です。<strong class="hl">KBCの利用者の中に「DCD」という診断名がついている人はほぼいない前提で考えたほうが現実的</strong>です。むしろ、ASD・ADHDの診断を持つ利用者の困りごとの中に、診断名のつかないDCD的な特性が混ざっている可能性がある、という見立てのほうが実態に近いといえます。</p>
+    <p class="small-note">※ 大人自身が困りごとを分析し、目標→計画→実行→振り返りのサイクルで自分に合う工夫を見つけていく、セルフコーピングの枠組みを紹介する資料もあります。これはCO-OPアプローチの「本人が考える」という発想と重なります。</p>
+  </div>
+</section>
+
+<!-- ============ 7. 職場で実際に起きること ============ -->
+<section class="alt" id="sec8" data-title="職場での現れ方">
+  <div class="wrap reveal">
+    <div class="section-tag">08 ｜ 職場での現れ方</div>
+    <h2 class="section-title">就労移行支援の現場で、こう見えている</h2>
+    <p class="section-desc">DCDの特性は、就労移行支援の実践においては次のような形で現れることがあります。「性格」や「意欲」の問題として片づける前に、動作の設計・実行・微調整というプロセスに負荷がかかっている可能性を考えてみる視点が役立ちます。</p>
+
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 20l6-14M6 6l6 14M4 20h16"/></svg></div>
+        <div class="txt">
+          <h4>手先の作業が遅い・不正確</h4>
+          <p>書類の仕分け、ホチキス留め、配線の接続など、細かな手指のコントロールが必要な作業に時間がかかり、ミスも出やすい。</p>
+          <span class="example">例：「丁寧にやっているのに時間内に終わらない」</span>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="icon-circle amber"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg></div>
+        <div class="txt">
+          <h4>文字がまとまりにくい／タイピングが遅い</h4>
+          <p>書字の乱れや、キーボードの手元を見ないと打てない状態は、単なる練習不足ではなく協調運動の特性による場合がある。</p>
+          <span class="example">例：入力速度が上がらず、資料作成に時間を要する</span>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 3v6M12 3l-8 4M12 3l8 4M4 7v10l8 4 8-4V7M12 13v8"/></svg></div>
+        <div class="txt">
+          <h4>姿勢が崩れやすい・すぐ疲れる</h4>
+          <p>座位や立位を保つこと自体にも常に微調整が必要なため、長時間のデスクワークで人一倍疲労しやすい。</p>
+          <span class="example">例：午後になると集中力より先に身体がつらくなる</span>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="icon-circle amber"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <div class="txt">
+          <h4>「同時に2つ」が特に苦手</h4>
+          <p>動作の確認に注意を使い切ってしまうため、電話を取りながらメモを取る、話を聞きながら作業するなど、動作と他の処理の同時進行が難しい。</p>
+          <span class="example">例：指示を聞いている間、手が止まってしまう</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">重要なのは、これらの困りごとは<strong class="hl">「頑張れば解決する」問題ではなく「動作の処理コストが高い」という構造の問題</strong>だということです。次のセクションでは、この構造に対してどのような支援アプローチが有効とされているかを見ていきます。</p>
+  </div>
+</section>
+
+<!-- ============ 8. 支援アプローチ ============ -->
+<section id="sec9" data-title="支援のアプローチ">
+  <div class="wrap reveal">
+    <div class="section-tag">09 ｜ 支援のアプローチ</div>
+    <h2 class="section-title">「繰り返し練習」から「考えながら解決する」へ</h2>
+    <p class="section-desc">DCD支援の代表的な方法のひとつに、カナダの作業療法士ヘレン・ポラタイコらが開発した<strong class="hl">CO-OPアプローチ（Cognitive Orientation to daily Occupational Performance）</strong>があります。従来型の「反復練習で慣れさせる」方法とは、前提そのものが異なります。</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="trad">従来型アプローチ</button>
+      <button class="tab-btn" data-tab="coop">CO-OPアプローチ</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-trad">
+      <span class="evbadge ev-mid">批判的に検討されている前提</span>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-dot">1</div>
+          <div class="flow-card">
+            <h4>正しい動作を「教える」</h4>
+            <p>支援者が正しいフォームやコツを説明し、見本を見せる。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">2</div>
+          <div class="flow-card">
+            <h4>同じ動作を反復練習する</h4>
+            <p>回数をこなすことで身体に覚え込ませようとする。</p>
+          </div>
+        </div>
+        <div class="flow-step break">
+          <div class="flow-dot">3</div>
+          <div class="flow-card">
+            <h4>課題：誤った動きごと定着しやすい</h4>
+            <p>内部モデル（予測）がそもそも作りにくいという特性がある場合、正しい動きを繰り返す前に誤った動きを繰り返し学習してしまい、かえって非効率になりうると指摘されています。また、ある課題で練習した動きが、別の課題にはあまり応用（般化）されにくいという限界も指摘されています。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-coop">
+      <span class="evbadge ev-strong">エビデンスが蓄積されているアプローチ</span>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-dot">1</div>
+          <div class="flow-card">
+            <h4>本人が目標を選ぶ</h4>
+            <p>支援者ではなく本人自身が「できるようになりたいこと」を選ぶ（クライエント中心）。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">2</div>
+          <div class="flow-card">
+            <h4>「どうすればできるか」を本人が考える（ガイドされた発見）</h4>
+            <p>支援者は答えを教えるのではなく、「今、身体はどう動いた？」「次はどう変えてみる？」といった問いかけで、本人自身が動作のズレに気づき、方略を発見する過程を助ける。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">3</div>
+          <div class="flow-card">
+            <h4>「考え方の型」を他の課題にも応用する</h4>
+            <p>特定の動作そのものではなく、「目標→方法を考える→試す→振り返る」という問題解決の枠組みを身につけるため、職場の別の作業にも応用が利きやすい。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">CO-OPアプローチは主に学齢期の子どもを対象に開発され効果が報告されてきましたが、書字困難のある成人の事例など、対象年齢を広げた実践例も紹介されています。就労移行支援においても、「やり方を教え込む」より「本人が自分の動作のクセに気づき、自分に合う方略を選ぶ」ことを支える関わりが、応用の効きやすい支援につながると考えられます。</p>
+
+    <div class="critical-box" style="margin-top:32px;background:var(--navy);">
+      <h3>本人向け：セルフコーピングの枠組み（GOAL–PLAN–DO–CHECK）</h3>
+      <p>大人の場合、支援者が常にそばにいるわけではないため、本人自身が困りごとを分析し、対策を練る習慣を持つことが自己支援の柱になります。CO-OPの「本人が考える」という発想を、一人でも使えるサイクルに落とし込んだものです。面談の中で、本人と一緒にこの4つの問いを埋めていく形で使えます。</p>
+      <p><strong style="color:#fff;">GOAL（目標）</strong>：「何を、どうできるようになりたいか」を具体的に決める（例：資料を時間内に仕上げたい）。</p>
+      <p><strong style="color:#fff;">PLAN（計画）</strong>：どういう手順・工夫でやれば良さそうか考える（手順をメモする、道具を変える、動画で確認するなど）。</p>
+      <p><strong style="color:#fff;">DO（実行）</strong>：実際にその方法を試してみる。</p>
+      <p><strong style="color:#fff;">CHECK（振り返り）</strong>：何がうまくいって、どこが難しかったかを確認し、次の工夫につなげる。</p>
+      <p style="margin-top:14px;">支援者の役割は、答えを教えることではなく、この4つのサイクルを本人が自分で回せるように、問いかけながら伴走することにあります。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. 現場でできること ============ -->
+<section class="alt" id="sec10" data-title="現場でできること">
+  <div class="wrap reveal">
+    <div class="section-tag">10 ｜ 現場でできること</div>
+    <h2 class="section-title">支援者としての具体的な関わり方</h2>
+    <p class="section-desc">DCDそのものを「治す」ことを目指すのではなく、環境と課題の側を調整し、本人が自分に合った方法を見つけるプロセスを支えるという、社会モデル的な視点が基本になります。</p>
+
+    <ul class="checklist">
+      <li>
+        <span class="cnum">01</span>
+        <div><h4>「不器用＝性格」という帰属をいったん保留する</h4>
+        <p>作業の遅さやミスの背景に、動作の処理コストという構造的要因がある可能性を、アセスメントの選択肢に含めておく。</p></div>
+      </li>
+      <li>
+        <span class="cnum">02</span>
+        <div><h4>手順を教えるより、本人と一緒に「うまくいく方法」を探る</h4>
+        <p>正しいやり方を一方的に示すより、「今の動きのどこで詰まったか」を一緒に振り返り、本人自身が方略を選べるよう問いかける（CO-OP的な関わり）。</p></div>
+      </li>
+      <li>
+        <span class="cnum">03</span>
+        <div><h4>道具・環境そのものを変える選択肢を持つ</h4>
+        <p>タイピングが苦手なら音声入力、細かい手作業が苦手なら補助具や治具の活用など、動作の負荷そのものを下げる環境調整も有効な支援。</p></div>
+      </li>
+      <li>
+        <span class="cnum">04</span>
+        <div><h4>同時処理を求める場面を減らす</h4>
+        <p>「聞きながらメモ」「話しながら作業」のように動作と他の処理を同時に求める場面を減らし、一つずつ確実に進められる業務設計を検討する。</p></div>
+      </li>
+      <li>
+        <span class="cnum">05</span>
+        <div><h4>疲労のサインとして受け止める</h4>
+        <p>姿勢の崩れやすさ・作業後の強い疲労は、怠けではなく常に微調整を続けていることの結果である可能性を踏まえ、休憩設計に反映する。</p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 10. 批判的視点・限界 ============ -->
+<section id="sec11" data-title="留意点・限界">
+  <div class="wrap reveal">
+    <div class="section-tag">11 ｜ 留意点・限界</div>
+    <h2 class="section-title">この図解を読むうえで、知っておきたいこと</h2>
+
+    <div class="critical-box">
+      <h3>批判的に見ておくべき3点</h3>
+      <p><strong style="color:#fff;">① メカニズムは「有力な仮説」の段階</strong><br>内部モデル仮説をはじめ、DCDの神経科学的な原因は完全には解明されていません。本図解での「仕組み」の説明は、現時点で有力とされる説明モデルであり、確定した事実ではないことを踏まえて読んでください。</p>
+      <p><strong style="color:#fff;">② 成人期・就労場面のエビデンスは、小児期研究に比べてまだ限定的</strong><br>DCDの研究の多くは学齢期の子どもを対象にしたものです。成人期・就労支援の場面に関する知見は相対的に少なく、本図解の職場での現れ方や支援アプローチの記述は、小児期の知見からの外挿を含みます。<span class="evbadge ev-limited">限定的なエビデンス</span></p>
+      <p><strong style="color:#fff;">③ 診断名がすべてではない</strong><br>DCDの診断がついていない利用者でも、協調運動の困難が背景にある可能性はあります。逆に、診断基準を機械的に当てはめて「DCDだから」と本人を分類することは避け、あくまで困りごとの理解を深める一つの視点として扱うことが大切です。</p>
+    </div>
+
+    <p class="section-desc" style="margin-top:28px;">DCDという枠組みを知ることの意味は、「診断名をつけること」ではなく、目の前の困りごとを「本人の努力不足」ではなく「動作の処理という構造の問題」として捉え直せることにあります。この視点の転換自体が、支援の選択肢を広げます。</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER / SOURCES ============ -->
+<footer>
+  <div class="wrap">
+    <h3>主な参照情報源</h3>
+    <ul class="source-list">
+      <li><a href="https://hattatsu.go.jp/supporter/healthcare_health/about-dcd/" target="_blank" rel="noopener">発達障害情報・支援センター「発達性協調運動症」（国立障害者リハビリテーションセンター）</a></li>
+      <li><a href="https://ja.wikipedia.org/wiki/CO-OP%E3%82%A2%E3%83%97%E3%83%AD%E3%83%BC%E3%83%81" target="_blank" rel="noopener">CO-OPアプローチ（Cognitive Orientation to daily Occupational Performance）解説</a></li>
+      <li><a href="https://www.kanekoshobo.co.jp/book/b616805.html" target="_blank" rel="noopener">『子どもの「できた！」を支援するCO-OPアプローチ』金子書房</a></li>
+      <li><a href="https://www.kanekoshobo.co.jp/book/b440833.html" target="_blank" rel="noopener">『発達性協調運動障害［DCD］』金子書房（宮原資英 監修）</a></li>
+      <li><a href="https://www.jisinsin.jp/general/typical_diseases/%E7%99%BA%E9%81%94%E6%80%A7%E5%BC%B7%E8%AA%BF%E9%81%8B%E5%8B%95%E7%97%87/" target="_blank" rel="noopener">一般社団法人 小児心身医学会「発達性協調運動症」</a></li>
+      <li><a href="https://koshigaya-mentalclinic.jp/blog/p1420/" target="_blank" rel="noopener">越谷心療内科さくらメンタルクリニック「DCDとは？有病率・併存症・支援の考え方」</a></li>
+      <li><a href="https://www.my-kokoro.jp/publish/books/research-aid-paper/vol58_2022/pdf/mykokoro_research-aid_paper_58_17.pdf" target="_blank" rel="noopener">大橋圭ほか「発達性協調運動障害の新規スクリーニング法の開発」（日本応用心理学会）</a></li>
+      <li><a href="https://mentalcare-lab.com/dcd/" target="_blank" rel="noopener">「発達性協調運動症の不器用さや運動オンチの症状・診断・関連する障害・自己治療・職場での工夫とセルフチェックリスト」</a></li>
+    </ul>
+    <p class="small-note" style="margin-top:20px;color:#7c8a9a;">本資料はDSM-5-TR診断基準および上記文献をもとに、就労移行支援スタッフ向けに要点を再構成したものです。個別の診断・判断には医療専門職の評価をご参照ください。</p>
+    <div class="foot-name">岡村雄一郎</div>
+  </div>
+</footer>
+
+<script>
+// ---- nav show/hide + progress ----
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+const navSectionLabel = document.getElementById('nav-section');
+const sections = Array.from(document.querySelectorAll('section[data-title]'));
+
+function updateNavScroll(){
+  const y = window.scrollY;
+  if(y > window.innerHeight * 0.6){ nav.classList.add('show'); } else { nav.classList.remove('show'); }
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docH > 0 ? (y/docH)*100 : 0;
+  progressBar.style.width = pct + '%';
+
+  let current = sections[0];
+  for(const s of sections){
+    const rect = s.getBoundingClientRect();
+    if(rect.top < window.innerHeight*0.4) current = s;
+  }
+  if(current) navSectionLabel.textContent = current.dataset.title;
+}
+window.addEventListener('scroll', updateNavScroll, {passive:true});
+updateNavScroll();
+
+// ---- reveal on scroll ----
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); revealObserver.unobserve(e.target); }
+  });
+},{threshold:0.12});
+revealEls.forEach(el=>revealObserver.observe(el));
+
+// ---- stat bar fill animation ----
+const bars = document.querySelectorAll('.stat-bar-fill, .overlap-fill');
+const barObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const w = e.target.getAttribute('data-w');
+      e.target.style.width = w + '%';
+      barObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.4});
+bars.forEach(b=>barObserver.observe(b));
+
+// ---- accordion ----
+document.querySelectorAll('.accordion-head').forEach(head=>{
+  head.addEventListener('click', ()=>{
+    const item = head.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.accordion-item').forEach(i=>i.classList.remove('open'));
+    if(!wasOpen){ item.classList.add('open'); }
+  });
+});
+
+// ---- tabs ----
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+target).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
